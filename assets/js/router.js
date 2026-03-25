@@ -26,22 +26,26 @@ const ERPRouter = (() => {
 
     currentRoute = path;
 
-    // Auth guard
-    if (!PUBLIC_ROUTES.includes(path) && !ERPAuth.isAuthenticated()) {
-      navigate('login');
-      return;
-    }
-    if (PUBLIC_ROUTES.includes(path) && ERPAuth.isAuthenticated()) {
-      navigate('dashboard');
-      return;
+    // Auth guard — skip if Firebase not configured (demo mode)
+    const demoMode = !auth;
+    if (!demoMode) {
+      if (!PUBLIC_ROUTES.includes(path) && !ERPAuth.isAuthenticated()) {
+        navigate('login');
+        return;
+      }
+      if (PUBLIC_ROUTES.includes(path) && ERPAuth.isAuthenticated()) {
+        navigate('dashboard');
+        return;
+      }
     }
 
     // Call handler
     if (routes[path]) {
       routes[path](params);
-    } else {
-      routes['404'] ? routes['404']() : show404();
+    } else if (routes['404']) {
+      routes['404']();
     }
+    // If no handler and no 404 handler, keep existing page content (static dashboard)
 
     // Update active nav item
     updateActiveNav(path);

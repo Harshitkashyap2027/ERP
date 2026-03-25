@@ -43,7 +43,7 @@ const ERPAppConfig = {
     gpsTracking: true,
     lms: true,
     placement: true,
-    hosteel: true,
+    hostel: true,
     transport: true,
     library: true,
     sms: false,
