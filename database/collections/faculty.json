@@ -1,0 +1,17 @@
+{
+  "_description": "Sample faculty document structure",
+  "userId": "firebase_auth_uid",
+  "name": "Dr. Priya Mehta",
+  "email": "priya.mehta@university.edu",
+  "phone": "9876543210",
+  "employeeId": "FAC2018045",
+  "department": "Computer Science & Engineering",
+  "designation": "Associate Professor",
+  "qualification": "Ph.D. (Computer Science)",
+  "specialization": "Machine Learning, Data Science",
+  "experience": 12,
+  "subjects": ["CS301", "CS401"],
+  "joiningDate": "2018-08-01",
+  "status": "active",
+  "createdAt": "2018-08-01T00:00:00Z"
+}

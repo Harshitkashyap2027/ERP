@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Register — UniBolt ERP</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../assets/css/main.css" />
+  <link rel="stylesheet" href="../../assets/css/animations.css" />
+  <style>
+    .auth-wrapper { min-height:100vh; display:flex; align-items:center; justify-content:center; padding:2rem; }
+    .auth-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-2xl);
+      padding: 2.5rem;
+      width: 100%; max-width: 560px;
+      box-shadow: var(--shadow-xl);
+    }
+    .auth-logo { display:flex; align-items:center; gap:0.75rem; justify-content:center; margin-bottom:2rem; text-decoration:none; }
+    .auth-logo-icon { width:44px;height:44px;background:linear-gradient(135deg,#6366f1,#8b5cf6);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.25rem;box-shadow:0 4px 16px rgba(99,102,241,0.4); }
+    .auth-logo-text { font-size:1.25rem;font-weight:800;color:var(--text-primary); }
+    .auth-logo-text span { color:#818cf8; }
+    .auth-title { text-align:center; font-size:1.5rem; font-weight:700; margin-bottom:0.5rem; }
+    .auth-sub { text-align:center; color:var(--text-muted); font-size:0.875rem; margin-bottom:2rem; }
+    .auth-sub a { color:var(--primary-light); }
+
+    .form-row { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+
+    .role-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:0.625rem; margin-bottom:1.25rem; }
+    .role-card { display:flex;flex-direction:column;align-items:center;gap:0.375rem;padding:0.875rem 0.5rem;background:var(--bg-tertiary);border:2px solid var(--border-color);border-radius:10px;cursor:pointer;transition:all 0.15s;color:var(--text-muted);font-size:0.8rem;font-weight:500; }
+    .role-card:hover { border-color:var(--primary);color:var(--primary-light); }
+    .role-card.active { border-color:var(--primary);background:rgba(99,102,241,0.1);color:var(--primary-light); }
+    .role-card-icon { font-size:1.25rem; }
+
+    .password-strength { margin-top:0.5rem; }
+    .strength-bar { display:flex;gap:3px;height:4px;border-radius:9999px;overflow:hidden; }
+    .strength-bar div { flex:1;border-radius:9999px;background:var(--bg-tertiary);transition:background 0.2s; }
+    .strength-label { font-size:0.75rem;color:var(--text-muted);margin-top:4px; }
+    .strength-0 .strength-bar div { background: var(--bg-tertiary); }
+    .strength-1 .strength-bar div:nth-child(1) { background: var(--danger); }
+    .strength-2 .strength-bar div:nth-child(-n+2) { background: var(--warning); }
+    .strength-3 .strength-bar div:nth-child(-n+3) { background: var(--info); }
+    .strength-4 .strength-bar div { background: var(--success); }
+  </style>
+</head>
+<body>
+  <div class="auth-wrapper">
+    <div class="auth-card animate-scale-in">
+      <a href="../../index.html" class="auth-logo">
+        <div class="auth-logo-icon">⚡</div>
+        <span class="auth-logo-text">Uni<span>Bolt</span></span>
+      </a>
+
+      <h1 class="auth-title">Create Your Account</h1>
+      <p class="auth-sub">Already have an account? <a href="login.html">Sign in →</a></p>
+
+      <!-- Role Selection -->
+      <div class="form-group">
+        <label class="form-label">I am a…</label>
+        <div class="role-grid" id="roleGrid">
+          <div class="role-card active" data-role="student" onclick="selectRole(this,'student')"><span class="role-card-icon">👨‍🎓</span>Student</div>
+          <div class="role-card" data-role="faculty" onclick="selectRole(this,'faculty')"><span class="role-card-icon">👨‍🏫</span>Faculty</div>
+          <div class="role-card" data-role="admin" onclick="selectRole(this,'admin')"><span class="role-card-icon">⚙️</span>Admin</div>
+          <div class="role-card" data-role="staff" onclick="selectRole(this,'staff')"><span class="role-card-icon">💼</span>Staff</div>
+          <div class="role-card" data-role="parent" onclick="selectRole(this,'parent')"><span class="role-card-icon">👨‍👩‍👧</span>Parent</div>
+          <div class="role-card" data-role="librarian" onclick="selectRole(this,'librarian')"><span class="role-card-icon">📚</span>Librarian</div>
+        </div>
+      </div>
+
+      <div id="registerAlert" class="alert alert-danger hidden" style="margin-bottom:1rem;"></div>
+
+      <form id="registerForm" novalidate>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="firstName">First Name</label>
+            <input type="text" id="firstName" name="firstName" class="form-control" placeholder="First name" required />
+            <div class="form-error" data-error="firstName"></div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="lastName">Last Name</label>
+            <input type="text" id="lastName" name="lastName" class="form-control" placeholder="Last name" required />
+            <div class="form-error" data-error="lastName"></div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="regEmail">Email Address</label>
+          <input type="email" id="regEmail" name="email" class="form-control" placeholder="your@university.edu" required />
+          <div class="form-error" data-error="email"></div>
+        </div>
+
+        <div class="form-group" id="rollNumberGroup">
+          <label class="form-label" for="rollNumber">Roll Number / Employee ID</label>
+          <input type="text" id="rollNumber" name="rollNumber" class="form-control" placeholder="e.g. 2024CSE042" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="department">Department</label>
+          <select id="department" name="department" class="form-control">
+            <option value="">Select department…</option>
+            <option>Computer Science & Engineering</option>
+            <option>Electronics & Communication</option>
+            <option>Mechanical Engineering</option>
+            <option>Civil Engineering</option>
+            <option>Information Technology</option>
+            <option>Management Studies</option>
+            <option>Sciences</option>
+            <option>Arts & Humanities</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="regPassword">Password</label>
+          <input type="password" id="regPassword" name="password" class="form-control" placeholder="Min. 8 characters" required oninput="checkStrength(this.value)" />
+          <div class="password-strength strength-0" id="strengthMeter">
+            <div class="strength-bar"><div></div><div></div><div></div><div></div></div>
+            <div class="strength-label" id="strengthLabel">Enter a password</div>
+          </div>
+          <div class="form-error" data-error="password"></div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="confirmPassword">Confirm Password</label>
+          <input type="password" id="confirmPassword" name="confirmPassword" class="form-control" placeholder="Repeat your password" required />
+          <div class="form-error" data-error="confirmPassword"></div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-check" style="cursor:pointer;">
+            <input type="checkbox" class="form-check-input" id="agreeTerms" required />
+            <span style="font-size:0.875rem;color:var(--text-secondary);">
+              I agree to the <a href="#" style="color:var(--primary-light);">Terms of Service</a> and <a href="#" style="color:var(--primary-light);">Privacy Policy</a>
+            </span>
+          </label>
+          <div class="form-error" data-error="terms"></div>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-full" id="registerBtn" style="height:44px;">
+          Create Account →
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+  <script src="../../assets/js/firebase.js"></script>
+  <script>
+    let selectedRole = 'student';
+
+    function selectRole(el, role) {
+      document.querySelectorAll('.role-card').forEach(c => c.classList.remove('active'));
+      el.classList.add('active');
+      selectedRole = role;
+      document.getElementById('rollNumberGroup').style.display = (role === 'student' || role === 'faculty' || role === 'staff') ? 'block' : 'none';
+    }
+
+    function checkStrength(val) {
+      let score = 0;
+      const labels = ['', 'Weak', 'Fair', 'Good', 'Strong'];
+      const colors = ['', '#ef4444', '#f59e0b', '#06b6d4', '#10b981'];
+      if (val.length >= 8) score++;
+      if (/[A-Z]/.test(val)) score++;
+      if (/\d/.test(val)) score++;
+      if (/[!@#$%^&*]/.test(val)) score++;
+      const meter = document.getElementById('strengthMeter');
+      meter.className = `password-strength strength-${score}`;
+      const label = document.getElementById('strengthLabel');
+      label.textContent = val ? labels[score] || 'Strong' : 'Enter a password';
+      label.style.color = val ? colors[score] : 'var(--text-muted)';
+    }
+
+    function showAlert(msg) {
+      const el = document.getElementById('registerAlert');
+      el.textContent = msg; el.classList.remove('hidden');
+    }
+
+    document.getElementById('registerForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const firstName = document.getElementById('firstName').value.trim();
+      const lastName = document.getElementById('lastName').value.trim();
+      const email = document.getElementById('regEmail').value.trim();
+      const password = document.getElementById('regPassword').value;
+      const confirmPwd = document.getElementById('confirmPassword').value;
+      const terms = document.getElementById('agreeTerms').checked;
+      const rollNumber = document.getElementById('rollNumber').value.trim();
+      const department = document.getElementById('department').value;
+
+      if (!firstName || !lastName || !email || !password) { showAlert('Please fill in all required fields.'); return; }
+      if (password !== confirmPwd) { showAlert('Passwords do not match.'); return; }
+      if (password.length < 8) { showAlert('Password must be at least 8 characters.'); return; }
+      if (!terms) { showAlert('You must agree to the Terms of Service.'); return; }
+
+      const btn = document.getElementById('registerBtn');
+      btn.disabled = true; btn.innerHTML = '⏳ Creating account…';
+
+      try {
+        const result = await auth.createUserWithEmailAndPassword(email, password);
+        await result.user.updateProfile({ displayName: `${firstName} ${lastName}` });
+        if (db) {
+          await db.collection('users').doc(result.user.uid).set({
+            name: `${firstName} ${lastName}`,
+            email,
+            role: selectedRole,
+            department: department || null,
+            rollNumber: rollNumber || null,
+            permissions: [],
+            status: 'active',
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+          });
+        }
+        await result.user.sendEmailVerification();
+        window.location.href = '../../dashboard.html';
+      } catch (err) {
+        btn.disabled = false; btn.innerHTML = 'Create Account →';
+        const messages = {
+          'auth/email-already-in-use': 'This email is already registered.',
+          'auth/invalid-email': 'Please enter a valid email address.',
+          'auth/weak-password': 'Password must be at least 6 characters.',
+          'auth/network-request-failed': 'Network error. Check your connection.',
+        };
+        showAlert(messages[err.code] || 'Registration failed. Please try again.');
+      }
+    });
+
+    if (auth) auth.onAuthStateChanged(u => { if (u) window.location.href = '../../dashboard.html'; });
+  </script>
+</body>
+</html>

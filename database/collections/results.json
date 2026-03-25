@@ -1,0 +1,18 @@
+{
+  "_description": "Sample result document structure",
+  "studentId": "student_doc_id",
+  "studentName": "Rahul Sharma",
+  "rollNumber": "2024CSE042",
+  "examId": "exam_doc_id",
+  "examName": "Mid-Semester Examination 2024",
+  "subjectCode": "CS301",
+  "subjectName": "Data Structures & Algorithms",
+  "semester": 3,
+  "totalMarks": 100,
+  "passingMarks": 40,
+  "marks": 78,
+  "grade": "B+",
+  "gradePoints": 8,
+  "result": "pass",
+  "createdAt": "2024-11-05T00:00:00Z"
+}

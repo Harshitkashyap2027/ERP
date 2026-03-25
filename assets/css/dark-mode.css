@@ -1,0 +1,173 @@
+/* ============================================
+   UNIBOLT ERP — DARK MODE OVERRIDES
+   Dark mode is default; this file adds light
+   mode styles and theme switch support.
+   ============================================ */
+
+/* ============================================
+   LIGHT MODE OVERRIDES
+   ============================================ */
+[data-theme="light"] body {
+  background-color: #f1f5f9;
+}
+
+[data-theme="light"] .sidebar {
+  background: #ffffff;
+  border-right-color: #e2e8f0;
+  box-shadow: 4px 0 12px rgba(0,0,0,0.04);
+}
+
+[data-theme="light"] .topbar {
+  background: #ffffff;
+  border-bottom-color: #e2e8f0;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+
+[data-theme="light"] .card,
+[data-theme="light"] .stat-card,
+[data-theme="light"] .kanban-column,
+[data-theme="light"] .kanban-card {
+  background: #ffffff;
+  border-color: #e2e8f0;
+}
+
+[data-theme="light"] .card:hover,
+[data-theme="light"] .stat-card:hover {
+  background: #f8fafc;
+}
+
+[data-theme="light"] .form-control {
+  background: #f8fafc;
+  border-color: #e2e8f0;
+  color: #0f172a;
+}
+
+[data-theme="light"] .form-control:focus {
+  background: #ffffff;
+}
+
+[data-theme="light"] thead {
+  background: #f8fafc;
+}
+
+[data-theme="light"] .nav-item:hover {
+  background: rgba(99, 102, 241, 0.06);
+}
+
+[data-theme="light"] .nav-item.active {
+  background: rgba(99, 102, 241, 0.1);
+}
+
+[data-theme="light"] .modal {
+  background: #ffffff;
+  border-color: #e2e8f0;
+}
+
+[data-theme="light"] .toast {
+  background: #ffffff;
+  border-color: #e2e8f0;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+}
+
+[data-theme="light"] .dropdown-menu {
+  background: #ffffff;
+  border-color: #e2e8f0;
+}
+
+[data-theme="light"] .topbar-btn,
+[data-theme="light"] .sidebar-toggle {
+  background: #f8fafc;
+  border-color: #e2e8f0;
+}
+
+[data-theme="light"] .search-results {
+  background: #ffffff;
+  border-color: #e2e8f0;
+}
+
+[data-theme="light"] .notification-panel {
+  background: #ffffff;
+  border-left-color: #e2e8f0;
+}
+
+[data-theme="light"] .skeleton {
+  background: linear-gradient(90deg, #e2e8f0 25%, #f1f5f9 50%, #e2e8f0 75%);
+  background-size: 200% 100%;
+}
+
+[data-theme="light"] .badge-secondary {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+[data-theme="light"] .accordion-header,
+[data-theme="light"] .accordion-item {
+  background: #ffffff;
+  border-color: #e2e8f0;
+}
+
+[data-theme="light"] .tab-list {
+  border-bottom-color: #e2e8f0;
+}
+
+/* ============================================
+   THEME TRANSITION
+   ============================================ */
+body,
+.sidebar, .topbar, .card, .stat-card, .modal,
+.toast, .dropdown-menu, .form-control,
+.notification-panel, .kanban-column {
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease,
+    color 0.2s ease;
+}
+
+/* ============================================
+   SYSTEM PREFERENCE (Auto Dark/Light)
+   ============================================ */
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) {
+    --bg-primary: #f1f5f9;
+    --bg-secondary: #ffffff;
+    --bg-tertiary: #f8fafc;
+    --bg-card: #ffffff;
+    --bg-card-hover: #f8fafc;
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --text-muted: #94a3b8;
+    --border-color: #e2e8f0;
+    --border-light: #f1f5f9;
+    --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+    --shadow-md: 0 4px 6px rgba(0,0,0,0.07);
+    --shadow-lg: 0 10px 25px rgba(0,0,0,0.1);
+  }
+}
+
+/* ============================================
+   COLOR SCHEME VARIATIONS
+   ============================================ */
+[data-color="blue"] {
+  --primary: #3b82f6;
+  --primary-dark: #2563eb;
+  --primary-light: #60a5fa;
+  --accent: #8b5cf6;
+}
+[data-color="green"] {
+  --primary: #10b981;
+  --primary-dark: #059669;
+  --primary-light: #34d399;
+  --accent: #3b82f6;
+}
+[data-color="orange"] {
+  --primary: #f59e0b;
+  --primary-dark: #d97706;
+  --primary-light: #fbbf24;
+  --accent: #ef4444;
+}
+[data-color="rose"] {
+  --primary: #f43f5e;
+  --primary-dark: #e11d48;
+  --primary-light: #fb7185;
+  --accent: #8b5cf6;
+}

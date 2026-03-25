@@ -1,0 +1,23 @@
+{
+  "_description": "Sample student document structure",
+  "userId": "firebase_auth_uid",
+  "name": "Rahul Sharma",
+  "email": "rahul@student.edu",
+  "phone": "9876543210",
+  "rollNumber": "2024CSE042",
+  "batch": "2024",
+  "semester": 3,
+  "department": "Computer Science & Engineering",
+  "section": "A",
+  "guardianName": "Suresh Sharma",
+  "guardianPhone": "9876543211",
+  "address": "123, MG Road, Delhi - 110001",
+  "aadhar": "xxxx-xxxx-xxxx",
+  "status": "active",
+  "hostel": true,
+  "transport": false,
+  "scholarships": [],
+  "documents": [],
+  "createdAt": "2024-07-01T00:00:00Z",
+  "updatedAt": "2024-11-01T00:00:00Z"
+}

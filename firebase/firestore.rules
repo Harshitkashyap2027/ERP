@@ -1,0 +1,150 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ── Helper functions ─────────────────────
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    function isOwner(uid) {
+      return isAuthenticated() && request.auth.uid == uid;
+    }
+    function getRole() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role;
+    }
+    function isAdmin() {
+      return isAuthenticated() && getRole() in ['admin', 'super_admin'];
+    }
+    function isFaculty() {
+      return isAuthenticated() && getRole() in ['faculty', 'admin', 'super_admin'];
+    }
+    function isStudent() {
+      return isAuthenticated() && getRole() == 'student';
+    }
+
+    // ── Users collection ─────────────────────
+    match /users/{userId} {
+      allow read: if isAuthenticated() && (isOwner(userId) || isAdmin());
+      allow create: if isAuthenticated();
+      allow update: if isAuthenticated() && (isOwner(userId) || isAdmin());
+      allow delete: if isAdmin();
+    }
+
+    // ── Students collection ──────────────────
+    match /students/{studentId} {
+      allow read: if isFaculty() || isOwner(studentId);
+      allow create, update: if isFaculty();
+      allow delete: if isAdmin();
+    }
+
+    // ── Faculty collection ───────────────────
+    match /faculty/{facultyId} {
+      allow read: if isAuthenticated();
+      allow create, update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    // ── Courses ──────────────────────────────
+    match /courses/{courseId} {
+      allow read: if isAuthenticated();
+      allow write: if isFaculty();
+    }
+
+    // ── Attendance ───────────────────────────
+    match /attendance/{record} {
+      allow read: if isAuthenticated();
+      allow create, update: if isFaculty();
+      allow delete: if isAdmin();
+    }
+
+    // ── Results ──────────────────────────────
+    match /results/{resultId} {
+      allow read: if isAuthenticated();
+      allow write: if isFaculty();
+    }
+
+    // ── Fees & Payments ──────────────────────
+    match /fees/{feeId} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
+    }
+    match /payments/{paymentId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated();
+      allow update, delete: if isAdmin();
+    }
+
+    // ── Library ──────────────────────────────
+    match /books/{bookId} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin() || getRole() == 'librarian';
+    }
+    match /bookIssues/{issueId} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin() || getRole() == 'librarian';
+    }
+
+    // ── Hostel ───────────────────────────────
+    match /hostelRooms/{roomId} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin() || getRole() == 'hostel_warden';
+    }
+    match /hostelAllocations/{allocId} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin() || getRole() == 'hostel_warden';
+    }
+
+    // ── Transport ────────────────────────────
+    match /transportRoutes/{routeId} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
+    }
+
+    // ── Notifications ────────────────────────
+    match /notifications/{notifId} {
+      allow read: if isAuthenticated() && request.auth.uid == resource.data.userId;
+      allow create: if isAuthenticated();
+      allow update: if isAuthenticated() && request.auth.uid == resource.data.userId;
+      allow delete: if isAdmin();
+    }
+
+    // ── Announcements ────────────────────────
+    match /announcements/{annId} {
+      allow read: if isAuthenticated();
+      allow write: if isFaculty();
+    }
+
+    // ── Audit Logs ───────────────────────────
+    match /auditLogs/{logId} {
+      allow read: if isAdmin();
+      allow create: if isAuthenticated();
+      allow update, delete: if false; // Immutable
+    }
+
+    // ── Tickets / Support ────────────────────
+    match /tickets/{ticketId} {
+      allow read: if isAuthenticated() && (isAdmin() || request.auth.uid == resource.data.userId);
+      allow create: if isAuthenticated();
+      allow update: if isAdmin() || request.auth.uid == resource.data.userId;
+      allow delete: if isAdmin();
+    }
+
+    // ── Events ───────────────────────────────
+    match /events/{eventId} {
+      allow read: if isAuthenticated();
+      allow write: if isFaculty();
+    }
+
+    // ── Jobs / Placements ────────────────────
+    match /jobs/{jobId} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin() || getRole() == 'placement_officer';
+    }
+
+    // ── Feedback ─────────────────────────────
+    match /feedback/{fbId} {
+      allow read: if isAdmin();
+      allow create: if isAuthenticated();
+    }
+  }
+}

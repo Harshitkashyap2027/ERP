@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard — UniBolt ERP</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/main.css" />
+  <link rel="stylesheet" href="assets/css/dashboard.css" />
+  <link rel="stylesheet" href="assets/css/animations.css" />
+  <link rel="stylesheet" href="assets/css/components.css" />
+  <link rel="stylesheet" href="assets/css/dark-mode.css" />
+</head>
+<body>
+  <!-- Page Loader -->
+  <div class="page-loader" id="pageLoader">
+    <div class="logo-icon" style="width:56px;height:56px;font-size:1.75rem;">⚡</div>
+    <div class="page-loader-logo">UniBolt ERP</div>
+    <div class="spinner"></div>
+    <div class="page-loader-text" id="loaderText">Initializing…</div>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Sidebar Overlay (mobile) -->
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <!-- Logo -->
+    <a href="index.html" class="sidebar-logo">
+      <div class="logo-icon">⚡</div>
+      <span class="logo-text">Uni<span>Bolt</span></span>
+    </a>
+
+    <!-- Navigation -->
+    <nav class="sidebar-nav" id="sidebarNav">
+      <!-- Populated by sidebar.js -->
+
+      <!-- Core -->
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Core</div>
+        <a href="#dashboard" class="nav-item active" data-route="dashboard">
+          <span class="nav-icon">🏠</span>
+          <span class="nav-label">Dashboard</span>
+        </a>
+        <a href="#search" class="nav-item" data-route="search">
+          <span class="nav-icon">🔍</span>
+          <span class="nav-label">Global Search</span>
+        </a>
+        <a href="#activity" class="nav-item" data-route="activity">
+          <span class="nav-icon">📋</span>
+          <span class="nav-label">Activity Timeline</span>
+        </a>
+      </div>
+
+      <!-- Students -->
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Students</div>
+        <button class="nav-item" data-sub-toggle="sub-students" data-route="students">
+          <span class="nav-icon">👨‍🎓</span>
+          <span class="nav-label">Students</span>
+          <span class="nav-arrow">›</span>
+        </button>
+        <ul class="nav-sub" id="sub-students">
+          <li><a href="#students" class="nav-sub-item" data-route="students"><span class="nav-sub-dot"></span>All Students</a></li>
+          <li><a href="#admissions" class="nav-sub-item" data-route="admissions"><span class="nav-sub-dot"></span>Admissions</a></li>
+          <li><a href="#enrollment" class="nav-sub-item" data-route="enrollment"><span class="nav-sub-dot"></span>Enrollment</a></li>
+          <li><a href="#alumni" class="nav-sub-item" data-route="alumni"><span class="nav-sub-dot"></span>Alumni</a></li>
+        </ul>
+        <a href="#attendance" class="nav-item" data-route="attendance">
+          <span class="nav-icon">📅</span>
+          <span class="nav-label">Attendance</span>
+        </a>
+        <a href="#performance" class="nav-item" data-route="performance">
+          <span class="nav-icon">🏆</span>
+          <span class="nav-label">Performance</span>
+        </a>
+      </div>
+
+      <!-- Faculty & Staff -->
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Faculty & Staff</div>
+        <button class="nav-item" data-sub-toggle="sub-faculty" data-route="faculty">
+          <span class="nav-icon">👨‍🏫</span>
+          <span class="nav-label">Faculty</span>
+          <span class="nav-arrow">›</span>
+        </button>
+        <ul class="nav-sub" id="sub-faculty">
+          <li><a href="#faculty" class="nav-sub-item" data-route="faculty"><span class="nav-sub-dot"></span>Faculty List</a></li>
+          <li><a href="#faculty-workload" class="nav-sub-item" data-route="faculty-workload"><span class="nav-sub-dot"></span>Workload</a></li>
+          <li><a href="#leave" class="nav-sub-item" data-route="leave"><span class="nav-sub-dot"></span>Leave Management</a></li>
+        </ul>
+        <a href="#staff" class="nav-item" data-route="staff">
+          <span class="nav-icon">💼</span>
+          <span class="nav-label">Staff</span>
+        </a>
+        <a href="#payroll" class="nav-item" data-route="payroll">
+          <span class="nav-icon">💰</span>
+          <span class="nav-label">Payroll</span>
+        </a>
+      </div>
+
+      <!-- Academics -->
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Academics</div>
+        <a href="#courses" class="nav-item" data-route="courses">
+          <span class="nav-icon">📚</span>
+          <span class="nav-label">Courses</span>
+        </a>
+        <a href="#timetable" class="nav-item" data-route="timetable">
+          <span class="nav-icon">🕐</span>
+          <span class="nav-label">Timetable</span>
+        </a>
+        <a href="#calendar" class="nav-item" data-route="calendar">
+          <span class="nav-icon">📆</span>
+          <span class="nav-label">Academic Calendar</span>
+        </a>
+        <a href="#curriculum" class="nav-item" data-route="curriculum">
+          <span class="nav-icon">📖</span>
+          <span class="nav-label">Curriculum</span>
+        </a>
+      </div>
+
+      <!-- Examinations -->
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Examinations</div>
+        <a href="#exams" class="nav-item" data-route="exams">
+          <span class="nav-icon">📝</span>
+          <span class="nav-label">Exam Engine</span>
+        </a>
+        <a href="#question-bank" class="nav-item" data-route="question-bank">
+          <span class="nav-icon">❓</span>
+          <span class="nav-label">Question Bank</span>
+        </a>
+        <a href="#results" class="nav-item" data-route="results">
+          <span class="nav-icon">📊</span>
+          <span class="nav-label">Results</span>
+        </a>
+        <a href="#gradebook" class="nav-item" data-route="gradebook">
+          <span class="nav-icon">🎓</span>
+          <span class="nav-label">Gradebook</span>
+        </a>
+      </div>
+
+      <!-- Finance -->
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Finance</div>
+        <a href="#fees" class="nav-item" data-route="fees">
+          <span class="nav-icon">💳</span>
+          <span class="nav-label">Fees</span>
+        </a>
+        <a href="#payments" class="nav-item" data-route="payments">
+          <span class="nav-icon">🧾</span>
+          <span class="nav-label">Payments</span>
+        </a>
+        <a href="#scholarships" class="nav-item" data-route="scholarships">
+          <span class="nav-icon">🎓</span>
+          <span class="nav-label">Scholarships</span>
+        </a>
+        <a href="#budget" class="nav-item" data-route="budget">
+          <span class="nav-icon">📊</span>
+          <span class="nav-label">Budget Planner</span>
+        </a>
+      </div>
+
+      <!-- Infrastructure -->
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Infrastructure</div>
+        <a href="#hostel" class="nav-item" data-route="hostel">
+          <span class="nav-icon">🏢</span>
+          <span class="nav-label">Hostel</span>
+        </a>
+        <a href="#transport" class="nav-item" data-route="transport">
+          <span class="nav-icon">🚌</span>
+          <span class="nav-label">Transport</span>
+        </a>
+        <a href="#library" class="nav-item" data-route="library">
+          <span class="nav-icon">📚</span>
+          <span class="nav-label">Library</span>
+        </a>
+        <a href="#inventory" class="nav-item" data-route="inventory">
+          <span class="nav-icon">📦</span>
+          <span class="nav-label">Inventory</span>
+        </a>
+      </div>
+
+      <!-- Communication -->
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Communication</div>
+        <a href="#chat" class="nav-item" data-route="chat">
+          <span class="nav-icon">💬</span>
+          <span class="nav-label">Chat</span>
+        </a>
+        <a href="#announcements" class="nav-item" data-route="announcements">
+          <span class="nav-icon">📢</span>
+          <span class="nav-label">Announcements</span>
+        </a>
+        <a href="#notifications" class="nav-item" data-route="notifications">
+          <span class="nav-icon">🔔</span>
+          <span class="nav-label">Notifications</span>
+        </a>
+        <a href="#events" class="nav-item" data-route="events">
+          <span class="nav-icon">🎉</span>
+          <span class="nav-label">Events</span>
+        </a>
+      </div>
+
+      <!-- Placement & LMS -->
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Placement & LMS</div>
+        <a href="#placement" class="nav-item" data-route="placement">
+          <span class="nav-icon">🎯</span>
+          <span class="nav-label">Placement</span>
+        </a>
+        <a href="#lms" class="nav-item" data-route="lms">
+          <span class="nav-icon">🎓</span>
+          <span class="nav-label">LMS</span>
+        </a>
+        <a href="#companies" class="nav-item" data-route="companies">
+          <span class="nav-icon">🏢</span>
+          <span class="nav-label">Companies</span>
+        </a>
+      </div>
+
+      <!-- AI & Analytics -->
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">AI & Analytics</div>
+        <a href="#ai-assistant" class="nav-item" data-route="ai-assistant">
+          <span class="nav-icon">🤖</span>
+          <span class="nav-label">AI Assistant</span>
+          <span class="badge badge-primary">AI</span>
+        </a>
+        <a href="#analytics" class="nav-item" data-route="analytics">
+          <span class="nav-icon">📈</span>
+          <span class="nav-label">Analytics</span>
+        </a>
+        <a href="#risk-detection" class="nav-item" data-route="risk-detection">
+          <span class="nav-icon">⚠️</span>
+          <span class="nav-label">Risk Detection</span>
+        </a>
+        <a href="#reports" class="nav-item" data-route="reports">
+          <span class="nav-icon">📊</span>
+          <span class="nav-label">Reports</span>
+        </a>
+      </div>
+
+      <!-- System -->
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">System</div>
+        <a href="#rbac" class="nav-item" data-route="rbac">
+          <span class="nav-icon">🔐</span>
+          <span class="nav-label">Access Control</span>
+        </a>
+        <a href="#settings" class="nav-item" data-route="settings">
+          <span class="nav-icon">⚙️</span>
+          <span class="nav-label">Settings</span>
+        </a>
+        <a href="#audit" class="nav-item" data-route="audit">
+          <span class="nav-icon">🛡️</span>
+          <span class="nav-label">Audit Logs</span>
+        </a>
+        <a href="#support" class="nav-item" data-route="support">
+          <span class="nav-icon">🎫</span>
+          <span class="nav-label">Support</span>
+        </a>
+      </div>
+    </nav>
+
+    <!-- Sidebar Footer / User -->
+    <div class="sidebar-footer">
+      <div class="sidebar-user" data-dropdown-toggle="userDropdown">
+        <div class="avatar avatar-sm" data-user-avatar>U</div>
+        <div class="sidebar-user-info">
+          <div class="sidebar-user-name" data-user-name>Loading…</div>
+          <div class="sidebar-user-role" data-user-role>Admin</div>
+        </div>
+        <span style="color:var(--text-muted);font-size:0.875rem;">⋮</span>
+      </div>
+      <div class="dropdown-menu" id="userDropdown" style="bottom:100%;top:auto;margin-bottom:0.5rem;">
+        <a href="#settings" class="dropdown-item">⚙️ Account Settings</a>
+        <a href="#profile" class="dropdown-item">👤 My Profile</a>
+        <div class="dropdown-divider"></div>
+        <button class="dropdown-item danger" data-action="logout">🚪 Sign Out</button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Topbar -->
+  <header class="topbar" id="topbar">
+    <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle Sidebar">
+      ☰
+    </button>
+
+    <!-- Search -->
+    <div class="topbar-search">
+      <div class="input-group" style="position:relative;">
+        <span class="search-icon" style="position:absolute;left:0.75rem;top:50%;transform:translateY(-50%);color:var(--text-muted);">🔍</span>
+        <input type="text" id="globalSearch" class="form-control" placeholder="Search students, faculty, courses…" style="padding-left:2.5rem;padding-right:5rem;" />
+        <span class="search-shortcut" style="position:absolute;right:0.75rem;top:50%;transform:translateY(-50%);font-size:0.7rem;color:var(--text-muted);background:var(--bg-primary);padding:2px 6px;border-radius:4px;border:1px solid var(--border-color);">⌘K</span>
+      </div>
+    </div>
+
+    <!-- Topbar Actions -->
+    <div class="topbar-actions">
+      <!-- Theme Toggle -->
+      <button class="topbar-btn" id="themeToggle" data-tooltip="Toggle Theme" aria-label="Toggle Theme">
+        🌙
+      </button>
+
+      <!-- Notifications -->
+      <button class="topbar-btn" id="notifToggle" data-tooltip="Notifications" aria-label="Notifications">
+        🔔
+        <span class="notification-dot"></span>
+      </button>
+
+      <!-- Help -->
+      <a href="#support" class="topbar-btn" data-tooltip="Help & Support" aria-label="Help">
+        ❓
+      </a>
+
+      <!-- User Avatar -->
+      <div class="dropdown">
+        <div class="avatar avatar-sm" data-user-avatar style="cursor:pointer;" data-dropdown-toggle="topbarUserMenu">U</div>
+        <div class="dropdown-menu" id="topbarUserMenu">
+          <div style="padding:0.75rem 1rem;border-bottom:1px solid var(--border-color);">
+            <div style="font-size:0.875rem;font-weight:600;" data-user-name>Loading…</div>
+            <div style="font-size:0.75rem;color:var(--text-muted);" data-user-role>Admin</div>
+          </div>
+          <a href="#profile" class="dropdown-item">👤 My Profile</a>
+          <a href="#settings" class="dropdown-item">⚙️ Settings</a>
+          <div class="dropdown-divider"></div>
+          <button class="dropdown-item danger" data-action="logout">🚪 Sign Out</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Notification Panel -->
+  <div class="notification-panel" id="notifPanel">
+    <div class="notification-panel-header">
+      <span style="font-weight:600;">Notifications</span>
+      <button class="btn btn-ghost btn-sm" onclick="document.getElementById('notifPanel').classList.remove('open')">✕</button>
+    </div>
+    <div class="notification-list" id="notifList">
+      <!-- Populated by notifications module -->
+      <div class="notification-item unread">
+        <div class="avatar avatar-sm" style="background:rgba(16,185,129,0.15);color:#10b981;flex-shrink:0;">✅</div>
+        <div class="notification-body">
+          <div class="notification-title">Fee payment received</div>
+          <div class="notification-text">Rahul Sharma paid ₹45,000</div>
+          <div class="notification-time">2 hours ago</div>
+        </div>
+      </div>
+      <div class="notification-item unread">
+        <div class="avatar avatar-sm" style="background:rgba(239,68,68,0.15);color:#ef4444;flex-shrink:0;">⚠️</div>
+        <div class="notification-body">
+          <div class="notification-title">Low attendance alert</div>
+          <div class="notification-text">23 students below 75% threshold</div>
+          <div class="notification-time">4 hours ago</div>
+        </div>
+      </div>
+      <div class="notification-item">
+        <div class="avatar avatar-sm" style="background:rgba(99,102,241,0.15);color:#6366f1;flex-shrink:0;">📝</div>
+        <div class="notification-body">
+          <div class="notification-title">Exam results published</div>
+          <div class="notification-text">Mid-Semester 2024 results are ready</div>
+          <div class="notification-time">Yesterday</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content Area -->
+  <main class="main-content" id="mainContent">
+    <div id="page-content">
+      <!-- Dashboard Content -->
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Good morning, <span data-user-name style="color:var(--primary-light);">Admin</span> 👋</h1>
+          <p class="page-subtitle">Here's what's happening at your campus today.</p>
+        </div>
+        <div class="flex gap-3">
+          <button class="btn btn-secondary btn-sm" onclick="ERPToast && ERPToast.show('Report generation feature coming soon!', 'info')">
+            📊 Quick Report
+          </button>
+          <a href="#students?action=new" class="btn btn-primary btn-sm">+ Add Student</a>
+        </div>
+      </div>
+
+      <!-- Stats Grid -->
+      <div class="stats-grid" id="statsGrid">
+        <!-- Stat cards rendered here -->
+        <div class="stat-card">
+          <div class="stat-icon" style="background:rgba(99,102,241,0.15);color:#6366f1">👨‍🎓</div>
+          <div class="stat-info">
+            <div class="stat-value" id="statStudents">—</div>
+            <div class="stat-label">Total Students</div>
+            <div class="stat-change up">↑ +12 this month</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:rgba(16,185,129,0.15);color:#10b981">👨‍🏫</div>
+          <div class="stat-info">
+            <div class="stat-value" id="statFaculty">—</div>
+            <div class="stat-label">Faculty Members</div>
+            <div class="stat-change up">↑ +2 this month</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:rgba(245,158,11,0.15);color:#f59e0b">💰</div>
+          <div class="stat-info">
+            <div class="stat-value" id="statFees">—</div>
+            <div class="stat-label">Pending Fees</div>
+            <div class="stat-change down">↓ -5% this month</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:rgba(6,182,212,0.15);color:#06b6d4">📊</div>
+          <div class="stat-info">
+            <div class="stat-value">87%</div>
+            <div class="stat-label">Avg Attendance</div>
+            <div class="stat-change up">↑ +2% this month</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Grid -->
+      <div class="dashboard-grid">
+        <!-- Left: Activity + Chart -->
+        <div style="display:flex;flex-direction:column;gap:var(--space-6);">
+          <!-- Revenue Chart Card -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">📈 Revenue Overview</div>
+              <div class="flex gap-2">
+                <span class="badge badge-success">↑ 18% this month</span>
+                <select class="form-control" style="width:auto;padding:var(--space-1) var(--space-3);height:auto;font-size:0.8rem;">
+                  <option>Last 6 months</option>
+                  <option>Last year</option>
+                </select>
+              </div>
+            </div>
+            <div class="chart-container" id="revenueChart">
+              <!-- Simple CSS chart placeholder -->
+              <div style="width:100%;height:100%;display:flex;align-items:flex-end;gap:12px;padding:1rem 0;">
+                <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;">
+                  <span style="font-size:0.7rem;color:var(--text-muted);">₹4.2L</span>
+                  <div style="width:100%;background:linear-gradient(to top,#6366f1,#818cf8);border-radius:6px 6px 0 0;height:60%;opacity:0.8;"></div>
+                  <span style="font-size:0.7rem;color:var(--text-muted);">Jun</span>
+                </div>
+                <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;">
+                  <span style="font-size:0.7rem;color:var(--text-muted);">₹5.1L</span>
+                  <div style="width:100%;background:linear-gradient(to top,#6366f1,#818cf8);border-radius:6px 6px 0 0;height:72%;opacity:0.8;"></div>
+                  <span style="font-size:0.7rem;color:var(--text-muted);">Jul</span>
+                </div>
+                <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;">
+                  <span style="font-size:0.7rem;color:var(--text-muted);">₹3.8L</span>
+                  <div style="width:100%;background:linear-gradient(to top,#6366f1,#818cf8);border-radius:6px 6px 0 0;height:54%;opacity:0.8;"></div>
+                  <span style="font-size:0.7rem;color:var(--text-muted);">Aug</span>
+                </div>
+                <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;">
+                  <span style="font-size:0.7rem;color:var(--text-muted);">₹6.5L</span>
+                  <div style="width:100%;background:linear-gradient(to top,#6366f1,#818cf8);border-radius:6px 6px 0 0;height:92%;opacity:0.8;"></div>
+                  <span style="font-size:0.7rem;color:var(--text-muted);">Sep</span>
+                </div>
+                <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;">
+                  <span style="font-size:0.7rem;color:var(--text-muted);">₹5.8L</span>
+                  <div style="width:100%;background:linear-gradient(to top,#6366f1,#818cf8);border-radius:6px 6px 0 0;height:82%;opacity:0.8;"></div>
+                  <span style="font-size:0.7rem;color:var(--text-muted);">Oct</span>
+                </div>
+                <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;">
+                  <span style="font-size:0.7rem;color:var(--text-muted);">₹7.2L</span>
+                  <div style="width:100%;background:linear-gradient(to top,#6366f1,#8b5cf6);border-radius:6px 6px 0 0;height:100%;"></div>
+                  <span style="font-size:0.7rem;color:var(--primary-light);font-weight:600;">Nov</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Recent Students -->
+          <div class="card" style="padding:0;overflow:hidden;">
+            <div class="card-header" style="padding:var(--space-4) var(--space-5);">
+              <div class="card-title">👨‍🎓 Recent Enrollments</div>
+              <a href="#students" class="btn btn-ghost btn-sm">View All →</a>
+            </div>
+            <div class="table-container" style="border:none;border-radius:0;">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Student</th>
+                    <th>Roll No.</th>
+                    <th>Course</th>
+                    <th>Attendance</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="recentStudentsTable">
+                  <tr>
+                    <td>
+                      <div class="flex items-center gap-3">
+                        <div class="avatar avatar-sm" style="background:linear-gradient(135deg,#6366f1,#8b5cf6);">RS</div>
+                        <div>
+                          <div style="font-weight:500;">Rahul Sharma</div>
+                          <div style="font-size:0.75rem;color:var(--text-muted);">rahul@student.edu</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td>2024CSE042</td>
+                    <td>B.Tech CSE</td>
+                    <td>
+                      <div style="display:flex;align-items:center;gap:8px;">
+                        <div class="progress" style="width:80px;"><div class="progress-bar" style="width:88%"></div></div>
+                        <span style="font-size:0.8rem;">88%</span>
+                      </div>
+                    </td>
+                    <td><span class="badge badge-success">Active</span></td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="flex items-center gap-3">
+                        <div class="avatar avatar-sm" style="background:linear-gradient(135deg,#f59e0b,#ef4444);">PV</div>
+                        <div>
+                          <div style="font-weight:500;">Priya Verma</div>
+                          <div style="font-size:0.75rem;color:var(--text-muted);">priya@student.edu</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td>2024ECE018</td>
+                    <td>B.Tech ECE</td>
+                    <td>
+                      <div style="display:flex;align-items:center;gap:8px;">
+                        <div class="progress" style="width:80px;"><div class="progress-bar warning" style="width:72%"></div></div>
+                        <span style="font-size:0.8rem;">72%</span>
+                      </div>
+                    </td>
+                    <td><span class="badge badge-warning">At Risk</span></td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="flex items-center gap-3">
+                        <div class="avatar avatar-sm" style="background:linear-gradient(135deg,#10b981,#06b6d4);">AK</div>
+                        <div>
+                          <div style="font-weight:500;">Amit Kumar</div>
+                          <div style="font-size:0.75rem;color:var(--text-muted);">amit@student.edu</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td>2024ME031</td>
+                    <td>B.Tech ME</td>
+                    <td>
+                      <div style="display:flex;align-items:center;gap:8px;">
+                        <div class="progress" style="width:80px;"><div class="progress-bar" style="width:95%"></div></div>
+                        <span style="font-size:0.8rem;">95%</span>
+                      </div>
+                    </td>
+                    <td><span class="badge badge-success">Active</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Activity + Quick Actions + Announcements -->
+        <div style="display:flex;flex-direction:column;gap:var(--space-6);">
+          <!-- Quick Actions -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">⚡ Quick Actions</div>
+            </div>
+            <div class="quick-actions" id="quickActions">
+              <a href="#students?action=new" class="quick-action-btn"><span class="quick-action-icon">➕</span><span class="quick-action-label">Add Student</span></a>
+              <a href="#attendance?action=mark" class="quick-action-btn"><span class="quick-action-icon">📅</span><span class="quick-action-label">Attendance</span></a>
+              <a href="#payments?action=new" class="quick-action-btn"><span class="quick-action-icon">💳</span><span class="quick-action-label">Collect Fee</span></a>
+              <a href="#announcements?action=new" class="quick-action-btn"><span class="quick-action-icon">📢</span><span class="quick-action-label">Announce</span></a>
+              <a href="#reports" class="quick-action-btn"><span class="quick-action-icon">📊</span><span class="quick-action-label">Report</span></a>
+              <a href="#library?action=issue" class="quick-action-btn"><span class="quick-action-icon">📚</span><span class="quick-action-label">Issue Book</span></a>
+              <a href="#tickets?action=new" class="quick-action-btn"><span class="quick-action-icon">🎫</span><span class="quick-action-label">Support</span></a>
+              <a href="#ai-assistant" class="quick-action-btn"><span class="quick-action-icon">🤖</span><span class="quick-action-label">AI Chat</span></a>
+            </div>
+          </div>
+
+          <!-- Activity Timeline -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">📋 Recent Activity</div>
+              <a href="#activity" class="btn btn-ghost btn-sm">View All →</a>
+            </div>
+            <div id="activityList">
+              <div class="timeline">
+                <div class="timeline-item">
+                  <div class="timeline-icon" style="background:rgba(16,185,129,0.15);color:#10b981">💳</div>
+                  <div class="timeline-content">
+                    <div class="timeline-title">Fee payment received</div>
+                    <div class="timeline-text">₹45,000 — Priya Verma (2024ECE018)</div>
+                    <div class="timeline-time">2 hours ago</div>
+                  </div>
+                </div>
+                <div class="timeline-item">
+                  <div class="timeline-icon" style="background:rgba(99,102,241,0.15);color:#6366f1">👨‍🎓</div>
+                  <div class="timeline-content">
+                    <div class="timeline-title">New student enrolled</div>
+                    <div class="timeline-text">Rohit Singh — B.Tech Sem 1</div>
+                    <div class="timeline-time">4 hours ago</div>
+                  </div>
+                </div>
+                <div class="timeline-item">
+                  <div class="timeline-icon" style="background:rgba(245,158,11,0.15);color:#f59e0b">📝</div>
+                  <div class="timeline-content">
+                    <div class="timeline-title">Exam results published</div>
+                    <div class="timeline-text">Mid-Sem 2024 — Computer Science</div>
+                    <div class="timeline-time">Yesterday</div>
+                  </div>
+                </div>
+                <div class="timeline-item">
+                  <div class="timeline-icon" style="background:rgba(239,68,68,0.15);color:#ef4444">⚠️</div>
+                  <div class="timeline-content">
+                    <div class="timeline-title">Low attendance alert</div>
+                    <div class="timeline-text">23 students below 75% threshold</div>
+                    <div class="timeline-time">Yesterday</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Announcements -->
+          <div class="card" style="padding:0;overflow:hidden;">
+            <div class="card-header" style="padding:var(--space-4) var(--space-5);">
+              <div class="card-title">📢 Announcements</div>
+              <a href="#announcements?action=new" class="btn btn-primary btn-sm">+ New</a>
+            </div>
+            <div id="announcements">
+              <div style="padding:var(--space-4);border-bottom:1px solid var(--border-light);display:flex;gap:var(--space-3);">
+                <div style="width:4px;border-radius:9999px;background:var(--primary);flex-shrink:0;"></div>
+                <div style="flex:1;">
+                  <div style="font-size:0.875rem;font-weight:600;color:var(--text-primary);margin-bottom:4px;">Mid-Semester Examinations</div>
+                  <div style="font-size:0.8rem;color:var(--text-muted);">Scheduled from Nov 15–25. Check timetable.</div>
+                </div>
+                <div style="font-size:0.75rem;color:var(--text-muted);white-space:nowrap;">Nov 10</div>
+              </div>
+              <div style="padding:var(--space-4);border-bottom:1px solid var(--border-light);display:flex;gap:var(--space-3);">
+                <div style="width:4px;border-radius:9999px;background:var(--warning);flex-shrink:0;"></div>
+                <div style="flex:1;">
+                  <div style="font-size:0.875rem;font-weight:600;color:var(--text-primary);margin-bottom:4px;">Fee Submission Deadline</div>
+                  <div style="font-size:0.8rem;color:var(--text-muted);">Last date Nov 20. Late fee ₹500/day.</div>
+                </div>
+                <div style="font-size:0.75rem;color:var(--text-muted);white-space:nowrap;">Nov 8</div>
+              </div>
+              <div style="padding:var(--space-4);display:flex;gap:var(--space-3);">
+                <div style="width:4px;border-radius:9999px;background:var(--success);flex-shrink:0;"></div>
+                <div style="flex:1;">
+                  <div style="font-size:0.875rem;font-weight:600;color:var(--text-primary);margin-bottom:4px;">Annual Tech Fest 2024</div>
+                  <div style="font-size:0.8rem;color:var(--text-muted);">Register teams before Nov 12.</div>
+                </div>
+                <div style="font-size:0.75rem;color:var(--text-muted);white-space:nowrap;">Nov 6</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Attendance Overview -->
+      <div class="card mt-6">
+        <div class="card-header">
+          <div class="card-title">📅 Department-wise Attendance Overview</div>
+          <div class="flex gap-2">
+            <select class="form-control" style="width:auto;padding:4px 12px;height:auto;font-size:0.8rem;">
+              <option>November 2024</option>
+              <option>October 2024</option>
+            </select>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:var(--space-4);">
+          <div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
+              <span style="font-size:0.875rem;font-weight:500;">Computer Science</span>
+              <span style="font-size:0.875rem;color:var(--success);">91%</span>
+            </div>
+            <div class="progress" style="height:8px;"><div class="progress-bar" style="width:91%"></div></div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
+              <span style="font-size:0.875rem;font-weight:500;">Electronics & Communication</span>
+              <span style="font-size:0.875rem;color:var(--success);">87%</span>
+            </div>
+            <div class="progress" style="height:8px;"><div class="progress-bar" style="width:87%"></div></div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
+              <span style="font-size:0.875rem;font-weight:500;">Mechanical Engineering</span>
+              <span style="font-size:0.875rem;color:var(--warning);">76%</span>
+            </div>
+            <div class="progress" style="height:8px;"><div class="progress-bar warning" style="width:76%"></div></div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
+              <span style="font-size:0.875rem;font-weight:500;">Civil Engineering</span>
+              <span style="font-size:0.875rem;color:var(--danger);">71%</span>
+            </div>
+            <div class="progress" style="height:8px;"><div class="progress-bar danger" style="width:71%"></div></div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
+              <span style="font-size:0.875rem;font-weight:500;">Management Studies</span>
+              <span style="font-size:0.875rem;color:var(--success);">89%</span>
+            </div>
+            <div class="progress" style="height:8px;"><div class="progress-bar" style="width:89%"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-functions-compat.js"></script>
+
+  <!-- App Scripts -->
+  <script src="assets/js/firebase.js"></script>
+  <script src="assets/js/utils/constants.js"></script>
+  <script src="assets/js/utils/helpers.js"></script>
+  <script src="assets/js/utils/validators.js"></script>
+  <script src="assets/js/state/store.js"></script>
+  <script src="assets/js/state/authState.js"></script>
+  <script src="assets/js/state/userState.js"></script>
+  <script src="assets/js/components/toast.js"></script>
+  <script src="assets/js/components/modal.js"></script>
+  <script src="assets/js/components/loader.js"></script>
+  <script src="assets/js/components/navbar.js"></script>
+  <script src="assets/js/services/userService.js"></script>
+  <script src="assets/js/services/studentService.js"></script>
+  <script src="assets/js/services/facultyService.js"></script>
+  <script src="assets/js/services/financeService.js"></script>
+  <script src="assets/js/services/analyticsService.js"></script>
+  <script src="assets/js/services/notificationService.js"></script>
+  <script src="assets/js/modules/dashboard/dashboard.js"></script>
+  <script src="assets/js/auth.js"></script>
+  <script src="assets/js/router.js"></script>
+  <script src="assets/js/app.js"></script>
+
+  <script>
+    // Dashboard-specific initialisation
+    document.addEventListener('DOMContentLoaded', () => {
+      // Sidebar sub-nav toggle
+      document.querySelectorAll('[data-sub-toggle]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          btn.classList.toggle('expanded');
+          const subId = btn.getAttribute('data-sub-toggle');
+          const sub = document.getElementById(subId);
+          if (sub) sub.classList.toggle('open');
+        });
+      });
+
+      // Dropdown menus
+      document.addEventListener('click', (e) => {
+        if (!e.target.closest('.dropdown') && !e.target.closest('[data-dropdown-toggle]')) {
+          document.querySelectorAll('.dropdown-menu.open').forEach(m => m.classList.remove('open'));
+        }
+      });
+      document.querySelectorAll('[data-dropdown-toggle]').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const menuId = btn.getAttribute('data-dropdown-toggle');
+          const menu = document.getElementById(menuId);
+          if (menu) {
+            document.querySelectorAll('.dropdown-menu.open').forEach(m => { if (m !== menu) m.classList.remove('open'); });
+            menu.classList.toggle('open');
+          }
+        });
+      });
+
+      // Sidebar collapse
+      const sidebarToggle = document.getElementById('sidebarToggle');
+      const sidebar = document.getElementById('sidebar');
+      const topbar = document.getElementById('topbar');
+      const mainContent = document.getElementById('mainContent');
+      const overlay = document.getElementById('sidebarOverlay');
+
+      if (sidebarToggle) {
+        sidebarToggle.addEventListener('click', () => {
+          const isMobile = window.innerWidth <= 1024;
+          if (isMobile) {
+            sidebar.classList.toggle('mobile-open');
+            overlay.classList.toggle('show');
+          } else {
+            sidebar.classList.toggle('collapsed');
+            topbar.classList.toggle('sidebar-collapsed');
+            mainContent.classList.toggle('sidebar-collapsed');
+          }
+        });
+      }
+      if (overlay) overlay.addEventListener('click', () => { sidebar.classList.remove('mobile-open'); overlay.classList.remove('show'); });
+
+      // Theme toggle
+      const themeBtn = document.getElementById('themeToggle');
+      if (themeBtn) {
+        themeBtn.addEventListener('click', () => {
+          const current = document.documentElement.getAttribute('data-theme');
+          const next = current === 'dark' ? 'light' : 'dark';
+          document.documentElement.setAttribute('data-theme', next);
+          localStorage.setItem('erp_theme', next);
+          themeBtn.textContent = next === 'dark' ? '🌙' : '☀️';
+        });
+        const saved = localStorage.getItem('erp_theme');
+        if (saved) { document.documentElement.setAttribute('data-theme', saved); themeBtn.textContent = saved === 'dark' ? '🌙' : '☀️'; }
+      }
+
+      // Logout
+      document.querySelectorAll('[data-action="logout"]').forEach(el => {
+        el.addEventListener('click', async () => {
+          if (auth) await auth.signOut();
+          window.location.href = 'pages/auth/login.html';
+        });
+      });
+
+      // Auth guard
+      if (auth) {
+        auth.onAuthStateChanged(user => {
+          if (!user) {
+            window.location.href = 'pages/auth/login.html';
+            return;
+          }
+          // Update user info in UI
+          const name = user.displayName || user.email || 'User';
+          document.querySelectorAll('[data-user-name]').forEach(el => el.textContent = name);
+          // Hide loader
+          const loader = document.getElementById('pageLoader');
+          if (loader) { loader.classList.add('fade-out'); setTimeout(() => loader.style.display = 'none', 400); }
+          // Load stats
+          loadStats();
+        });
+      } else {
+        // Firebase not configured — show demo mode
+        document.querySelectorAll('[data-user-name]').forEach(el => el.textContent = 'Demo Admin');
+        document.querySelectorAll('[data-user-role]').forEach(el => el.textContent = 'Administrator');
+        const loader = document.getElementById('pageLoader');
+        if (loader) { loader.classList.add('fade-out'); setTimeout(() => loader.style.display = 'none', 400); }
+        loadStats();
+      }
+    });
+
+    // Load statistics from Firestore (demo fallback)
+    async function loadStats() {
+      try {
+        if (db) {
+          const studentsSnap = await db.collection('students').get();
+          const facultySnap = await db.collection('faculty').get();
+          const feesSnap = await db.collection('fees').where('status', '==', 'unpaid').get();
+          document.getElementById('statStudents').textContent = studentsSnap.size.toLocaleString('en-IN') || '0';
+          document.getElementById('statFaculty').textContent = facultySnap.size.toLocaleString('en-IN') || '0';
+          document.getElementById('statFees').textContent = feesSnap.size.toLocaleString('en-IN') || '0';
+        } else {
+          // Demo data
+          document.getElementById('statStudents').textContent = '2,847';
+          document.getElementById('statFaculty').textContent = '142';
+          document.getElementById('statFees').textContent = '326';
+        }
+      } catch (e) {
+        document.getElementById('statStudents').textContent = '2,847';
+        document.getElementById('statFaculty').textContent = '142';
+        document.getElementById('statFees').textContent = '326';
+      }
+    }
+  </script>
+</body>
+</html>
