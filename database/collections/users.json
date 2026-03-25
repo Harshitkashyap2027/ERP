@@ -1,0 +1,15 @@
+{
+  "_description": "Sample user document structure",
+  "uid": "firebase_auth_uid",
+  "name": "Rahul Sharma",
+  "email": "rahul@student.edu",
+  "photoURL": null,
+  "role": "student",
+  "department": "Computer Science & Engineering",
+  "rollNumber": "2024CSE042",
+  "employeeId": null,
+  "permissions": [],
+  "status": "active",
+  "createdAt": "2024-07-01T00:00:00Z",
+  "lastLogin": "2024-11-10T08:30:00Z"
+}

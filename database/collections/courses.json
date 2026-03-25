@@ -1,0 +1,17 @@
+{
+  "_description": "Sample course document structure",
+  "code": "CS301",
+  "name": "Data Structures & Algorithms",
+  "department": "Computer Science & Engineering",
+  "semester": 3,
+  "credits": 4,
+  "type": "theory",
+  "facultyId": "faculty_doc_id",
+  "facultyName": "Dr. Priya Mehta",
+  "batch": "2024",
+  "maxStudents": 60,
+  "enrolledStudents": 58,
+  "syllabus": [],
+  "status": "active",
+  "createdAt": "2024-07-01T00:00:00Z"
+}

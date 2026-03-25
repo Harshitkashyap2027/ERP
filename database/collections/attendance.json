@@ -1,0 +1,18 @@
+{
+  "_description": "Sample attendance record structure",
+  "studentId": "student_doc_id",
+  "studentName": "Rahul Sharma",
+  "rollNumber": "2024CSE042",
+  "subjectCode": "CS301",
+  "subjectName": "Data Structures & Algorithms",
+  "facultyId": "faculty_doc_id",
+  "date": "2024-11-10",
+  "monthYear": "2024-11",
+  "status": "present",
+  "semester": 3,
+  "department": "Computer Science & Engineering",
+  "totalClasses": 45,
+  "attended": 40,
+  "percentage": 88.9,
+  "updatedAt": "2024-11-10T10:00:00Z"
+}

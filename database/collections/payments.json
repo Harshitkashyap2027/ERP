@@ -1,0 +1,19 @@
+{
+  "_description": "Sample payment document structure",
+  "studentId": "student_doc_id",
+  "studentName": "Rahul Sharma",
+  "rollNumber": "2024CSE042",
+  "feeId": "fee_doc_id",
+  "amount": 45000,
+  "currency": "INR",
+  "category": "Tuition",
+  "academicYear": "2024-25",
+  "semester": 3,
+  "method": "Online",
+  "status": "paid",
+  "gatewayPaymentId": "pay_XXXXX",
+  "receiptNumber": "RCP-XXXXXXXX",
+  "remarks": "Semester 3 tuition fee",
+  "paidAt": "2024-11-01T14:30:00Z",
+  "createdAt": "2024-11-01T14:30:00Z"
+}

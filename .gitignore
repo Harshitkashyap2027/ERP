@@ -1,0 +1,46 @@
+# Dependencies
+node_modules/
+functions/node_modules/
+
+# Build artifacts
+dist/
+build/
+.cache/
+
+# Firebase
+.firebase/
+.firebaserc
+
+# Environment variables (keep secret!)
+.env
+.env.local
+.env.*.local
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+*.swo
+*~
+
+# Editor files
+.vscode/settings.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# Logs
+*.log
+npm-debug.log*
+
+# Temporary files
+/tmp/
+*.tmp
+*.temp
+
+# Secrets (never commit these!)
+firebase/firebase-config.local.js
+config/secrets.js

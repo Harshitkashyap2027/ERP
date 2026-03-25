@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UniBolt ERP — Enterprise College Management</title>
+  <meta name="description" content="UniBolt ERP — The next-generation enterprise college management system powered by AI." />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/main.css" />
+  <link rel="stylesheet" href="assets/css/animations.css" />
+  <style>
+    /* ── Landing Page Styles ── */
+    body { overflow-x: hidden; }
+
+    /* Hero */
+    .landing-hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Animated background */
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 80% 60% at 50% -10%, rgba(99,102,241,0.25) 0%, transparent 60%),
+                  radial-gradient(ellipse 60% 50% at 80% 50%, rgba(139,92,246,0.15) 0%, transparent 50%),
+                  radial-gradient(ellipse 50% 40% at 20% 80%, rgba(14,165,233,0.12) 0%, transparent 50%);
+    }
+    .hero-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(99,102,241,0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(99,102,241,0.05) 1px, transparent 1px);
+      background-size: 40px 40px;
+      mask-image: radial-gradient(ellipse at center, black 30%, transparent 80%);
+    }
+
+    /* Navigation */
+    .landing-nav {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.5rem 3rem;
+    }
+    .landing-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+    }
+    .landing-logo-icon {
+      width: 40px; height: 40px;
+      background: linear-gradient(135deg, #6366f1, #8b5cf6);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.25rem;
+      box-shadow: 0 4px 16px rgba(99,102,241,0.4);
+    }
+    .landing-logo-text {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #f1f5f9;
+      letter-spacing: -0.025em;
+    }
+    .landing-logo-text span { color: #818cf8; }
+    .landing-nav-links {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      list-style: none;
+    }
+    .landing-nav-links a {
+      color: #94a3b8;
+      font-size: 0.875rem;
+      font-weight: 500;
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    .landing-nav-links a:hover { color: #f1f5f9; }
+    .landing-nav-actions { display: flex; align-items: center; gap: 0.75rem; }
+
+    /* Hero content */
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      flex: 1;
+      text-align: center;
+      padding: 4rem 2rem;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.375rem 1rem;
+      background: rgba(99,102,241,0.15);
+      border: 1px solid rgba(99,102,241,0.3);
+      border-radius: 9999px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #818cf8;
+      margin-bottom: 1.5rem;
+      animation: fadeInDown 0.6s ease;
+    }
+    .hero-title {
+      font-size: clamp(2.5rem, 6vw, 4.5rem);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      margin-bottom: 1.5rem;
+      animation: fadeInUp 0.6s ease 0.1s both;
+    }
+    .hero-title .gradient-text {
+      background: linear-gradient(135deg, #6366f1, #8b5cf6, #0ea5e9);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-subtitle {
+      font-size: 1.125rem;
+      color: #94a3b8;
+      max-width: 600px;
+      line-height: 1.7;
+      margin-bottom: 2.5rem;
+      animation: fadeInUp 0.6s ease 0.2s both;
+    }
+    .hero-cta {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      animation: fadeInUp 0.6s ease 0.3s both;
+    }
+    .btn-hero-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.875rem 2rem;
+      background: linear-gradient(135deg, #6366f1, #8b5cf6);
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s;
+      box-shadow: 0 4px 20px rgba(99,102,241,0.4);
+    }
+    .btn-hero-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(99,102,241,0.5);
+      color: #fff;
+    }
+    .btn-hero-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.875rem 2rem;
+      background: transparent;
+      color: #94a3b8;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .btn-hero-secondary:hover { border-color: #6366f1; color: #818cf8; background: rgba(99,102,241,0.05); }
+
+    /* Stats Bar */
+    .hero-stats {
+      display: flex;
+      gap: 3rem;
+      margin-top: 4rem;
+      animation: fadeInUp 0.6s ease 0.4s both;
+    }
+    .hero-stat { text-align: center; }
+    .hero-stat-value { font-size: 2rem; font-weight: 800; color: #f1f5f9; }
+    .hero-stat-label { font-size: 0.8rem; color: #64748b; margin-top: 4px; }
+
+    /* Features Section */
+    .features-section {
+      position: relative;
+      padding: 6rem 2rem;
+      text-align: center;
+    }
+    .section-tag {
+      display: inline-block;
+      padding: 0.25rem 0.875rem;
+      background: rgba(99,102,241,0.1);
+      color: #818cf8;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 1rem;
+    }
+    .section-title {
+      font-size: clamp(1.75rem, 4vw, 2.5rem);
+      font-weight: 800;
+      letter-spacing: -0.025em;
+      margin-bottom: 1rem;
+    }
+    .section-subtitle { color: #64748b; max-width: 560px; margin: 0 auto 3rem; line-height: 1.7; }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .feature-card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 16px;
+      padding: 2rem;
+      text-align: left;
+      transition: all 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(99,102,241,0.05), transparent);
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    .feature-card:hover { border-color: #6366f1; transform: translateY(-4px); box-shadow: 0 12px 30px rgba(0,0,0,0.3); }
+    .feature-card:hover::before { opacity: 1; }
+    .feature-icon {
+      width: 52px; height: 52px;
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem;
+      margin-bottom: 1.25rem;
+      background: rgba(99,102,241,0.15);
+    }
+    .feature-title { font-size: 1rem; font-weight: 700; color: #f1f5f9; margin-bottom: 0.5rem; }
+    .feature-text { font-size: 0.875rem; color: #64748b; line-height: 1.6; }
+
+    /* Modules section */
+    .modules-section { padding: 4rem 2rem; background: #111827; }
+    .modules-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 1rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .module-chip {
+      display: flex; flex-direction: column; align-items: center;
+      gap: 0.5rem; padding: 1.25rem 1rem;
+      background: #1e293b; border: 1px solid #334155;
+      border-radius: 12px; text-align: center;
+      transition: all 0.2s; cursor: default;
+    }
+    .module-chip:hover { border-color: #6366f1; background: rgba(99,102,241,0.08); }
+    .module-chip-icon { font-size: 1.5rem; }
+    .module-chip-label { font-size: 0.8rem; font-weight: 500; color: #94a3b8; }
+
+    /* CTA Section */
+    .cta-section {
+      padding: 6rem 2rem;
+      text-align: center;
+      background: linear-gradient(135deg, rgba(99,102,241,0.1), rgba(139,92,246,0.1));
+      border-top: 1px solid #1e293b;
+    }
+
+    /* Footer */
+    footer {
+      background: #0a0f1a;
+      border-top: 1px solid #1e293b;
+      padding: 2rem;
+      text-align: center;
+      color: #475569;
+      font-size: 0.875rem;
+    }
+    footer span { color: #6366f1; }
+
+    @media (max-width: 768px) {
+      .landing-nav { padding: 1rem 1.5rem; }
+      .landing-nav-links { display: none; }
+      .hero-stats { gap: 1.5rem; }
+      .hero-stat-value { font-size: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Landing Page -->
+  <main class="landing-hero">
+    <div class="hero-bg"></div>
+    <div class="hero-grid"></div>
+
+    <!-- Navigation -->
+    <nav class="landing-nav">
+      <a href="index.html" class="landing-logo">
+        <div class="landing-logo-icon">⚡</div>
+        <span class="landing-logo-text">Uni<span>Bolt</span></span>
+      </a>
+      <ul class="landing-nav-links">
+        <li><a href="#features">Features</a></li>
+        <li><a href="#modules">Modules</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+      <div class="landing-nav-actions">
+        <a href="pages/auth/login.html" class="btn btn-secondary btn-sm">Sign In</a>
+        <a href="pages/auth/register.html" class="btn btn-primary btn-sm">Get Started</a>
+      </div>
+    </nav>
+
+    <!-- Hero -->
+    <div class="hero-content">
+      <div class="hero-badge">
+        ⚡ Next-Gen Enterprise ERP — Powered by AI
+      </div>
+      <h1 class="hero-title">
+        The ERP That Actually<br/>
+        <span class="gradient-text">Runs Your Campus</span>
+      </h1>
+      <p class="hero-subtitle">
+        UniBolt ERP is an enterprise-grade college management platform with 50+ modules — from AI-powered analytics to real-time collaboration. Built for institutions that refuse to settle.
+      </p>
+      <div class="hero-cta">
+        <a href="pages/auth/login.html" class="btn-hero-primary">
+          🚀 Launch Dashboard
+        </a>
+        <a href="pages/auth/register.html" class="btn-hero-secondary">
+          📋 Request Demo
+        </a>
+      </div>
+
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <div class="hero-stat-value">50+</div>
+          <div class="hero-stat-label">ERP Modules</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-value">99.9%</div>
+          <div class="hero-stat-label">Uptime SLA</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-value">AI</div>
+          <div class="hero-stat-label">Powered Core</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-value">∞</div>
+          <div class="hero-stat-label">Scalability</div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Features Section -->
+  <section class="features-section" id="features">
+    <div class="section-tag">🔥 Why UniBolt?</div>
+    <h2 class="section-title">Enterprise-Grade. Zero Compromise.</h2>
+    <p class="section-subtitle">Every feature engineered to solve real institutional challenges at scale.</p>
+
+    <div class="features-grid">
+      <div class="feature-card animate-fade-in-up">
+        <div class="feature-icon">🤖</div>
+        <div class="feature-title">AI-Powered Analytics</div>
+        <div class="feature-text">Predictive analytics for student risk detection, attendance forecasting, and performance insights using machine learning.</div>
+      </div>
+      <div class="feature-card animate-fade-in-up delay-100">
+        <div class="feature-icon">⚡</div>
+        <div class="feature-title">Real-Time Everything</div>
+        <div class="feature-text">Firebase-powered real-time data sync. Attendance, fees, notifications — all live, all instant, no page refreshes.</div>
+      </div>
+      <div class="feature-card animate-fade-in-up delay-200">
+        <div class="feature-icon">🔐</div>
+        <div class="feature-title">Enterprise Security</div>
+        <div class="feature-text">Role-based access control, multi-factor authentication, audit logs, data encryption, and GDPR compliance built-in.</div>
+      </div>
+      <div class="feature-card animate-fade-in-up delay-300">
+        <div class="feature-icon">📱</div>
+        <div class="feature-title">Mobile-First Design</div>
+        <div class="feature-text">Fully responsive, works flawlessly on any device. Students and faculty can access from anywhere, anytime.</div>
+      </div>
+      <div class="feature-card animate-fade-in-up delay-400">
+        <div class="feature-icon">🔗</div>
+        <div class="feature-title">Integration Hub</div>
+        <div class="feature-text">Connect with payment gateways, biometric devices, RFID, Google Workspace, Microsoft 365, and 100+ third-party APIs.</div>
+      </div>
+      <div class="feature-card animate-fade-in-up delay-500">
+        <div class="feature-icon">🎓</div>
+        <div class="feature-title">Complete LMS</div>
+        <div class="feature-text">Full learning management system with video lectures, assignments, quizzes, AI doubt support, and certification engine.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Modules Section -->
+  <section class="modules-section" id="modules">
+    <div style="text-align:center;margin-bottom:3rem;">
+      <div class="section-tag">📦 50+ Modules</div>
+      <h2 class="section-title">Every Module Your Institution Needs</h2>
+      <p class="section-subtitle">From admissions to alumni — one unified platform.</p>
+    </div>
+    <div class="modules-grid">
+      <div class="module-chip"><span class="module-chip-icon">👨‍🎓</span><span class="module-chip-label">Student 360</span></div>
+      <div class="module-chip"><span class="module-chip-icon">👨‍🏫</span><span class="module-chip-label">Faculty System</span></div>
+      <div class="module-chip"><span class="module-chip-icon">📚</span><span class="module-chip-label">Academic Engine</span></div>
+      <div class="module-chip"><span class="module-chip-icon">📝</span><span class="module-chip-label">Exam System</span></div>
+      <div class="module-chip"><span class="module-chip-icon">💰</span><span class="module-chip-label">Finance & Fees</span></div>
+      <div class="module-chip"><span class="module-chip-icon">🏢</span><span class="module-chip-label">Hostel Mgmt</span></div>
+      <div class="module-chip"><span class="module-chip-icon">🚌</span><span class="module-chip-label">Transport GPS</span></div>
+      <div class="module-chip"><span class="module-chip-icon">📚</span><span class="module-chip-label">Library</span></div>
+      <div class="module-chip"><span class="module-chip-icon">🎯</span><span class="module-chip-label">Placement</span></div>
+      <div class="module-chip"><span class="module-chip-icon">🎓</span><span class="module-chip-label">LMS</span></div>
+      <div class="module-chip"><span class="module-chip-icon">💬</span><span class="module-chip-label">Communication</span></div>
+      <div class="module-chip"><span class="module-chip-icon">🤖</span><span class="module-chip-label">AI Assistant</span></div>
+      <div class="module-chip"><span class="module-chip-icon">📊</span><span class="module-chip-label">Analytics</span></div>
+      <div class="module-chip"><span class="module-chip-icon">📦</span><span class="module-chip-label">Inventory</span></div>
+      <div class="module-chip"><span class="module-chip-icon">🎉</span><span class="module-chip-label">Events</span></div>
+      <div class="module-chip"><span class="module-chip-icon">🔐</span><span class="module-chip-label">RBAC</span></div>
+      <div class="module-chip"><span class="module-chip-icon">🛡️</span><span class="module-chip-label">Audit Logs</span></div>
+      <div class="module-chip"><span class="module-chip-icon">🎫</span><span class="module-chip-label">Helpdesk</span></div>
+      <div class="module-chip"><span class="module-chip-icon">🏆</span><span class="module-chip-label">Clubs & Societies</span></div>
+      <div class="module-chip"><span class="module-chip-icon">📋</span><span class="module-chip-label">Admissions</span></div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="cta-section" id="contact">
+    <h2 class="section-title">Ready to Transform Your Campus?</h2>
+    <p class="section-subtitle">Join the institutions that have already upgraded to enterprise-grade management.</p>
+    <div class="hero-cta">
+      <a href="pages/auth/register.html" class="btn-hero-primary">🚀 Start Free Trial</a>
+      <a href="pages/auth/login.html" class="btn-hero-secondary">Sign In →</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>© 2024 <span>UniBolt ERP</span> — Enterprise College Management System. Built with ⚡ and Firebase.</p>
+  </footer>
+</body>
+</html>

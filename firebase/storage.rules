@@ -1,0 +1,55 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    // ── Helper functions ─────────────────────
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    function isValidImage() {
+      return request.resource.contentType.matches('image/.*')
+        && request.resource.size < 5 * 1024 * 1024; // 5 MB max
+    }
+    function isValidDocument() {
+      return request.resource.contentType in ['application/pdf', 'application/msword', 'text/plain']
+        && request.resource.size < 10 * 1024 * 1024; // 10 MB max
+    }
+
+    // ── User Avatars ─────────────────────────
+    match /avatars/{userId} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated() && request.auth.uid == userId && isValidImage();
+    }
+
+    // ── Student Documents ─────────────────────
+    match /students/{studentId}/{document=**} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated() && isValidDocument();
+    }
+
+    // ── Faculty Documents ─────────────────────
+    match /faculty/{facultyId}/{document=**} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated() && isValidDocument();
+    }
+
+    // ── Assignment Submissions ─────────────────
+    match /submissions/{studentId}/{assignmentId} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated() && request.auth.uid == studentId && isValidDocument();
+    }
+
+    // ── Library Resources ─────────────────────
+    match /library/{document=**} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated();
+    }
+
+    // ── General Uploads ───────────────────────
+    match /uploads/{userId}/{document=**} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated() && request.auth.uid == userId
+        && request.resource.size < 10 * 1024 * 1024;
+    }
+  }
+}
