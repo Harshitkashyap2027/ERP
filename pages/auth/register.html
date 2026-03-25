@@ -53,19 +53,24 @@
         <span class="auth-logo-text">Uni<span>Bolt</span></span>
       </a>
 
-      <h1 class="auth-title">Create Your Account</h1>
-      <p class="auth-sub">Already have an account? <a href="login.html">Sign in →</a></p>
+      <h1 class="auth-title" id="authTitle">Create Your Account</h1>
+      <p class="auth-sub" id="authSub">Already have an account? <a href="login.html">Sign in →</a></p>
 
-      <!-- Role Selection -->
-      <div class="form-group">
+      <!-- Invite notice (hidden by default, shown when invite token present) -->
+      <div id="inviteNotice" class="hidden" style="margin-bottom:1rem;padding:0.875rem 1rem;background:rgba(99,102,241,0.1);border:1px solid rgba(99,102,241,0.3);border-radius:10px;font-size:0.875rem;">
+        <div style="font-weight:600;color:var(--primary-light);margin-bottom:4px;">🔗 Invitation Link</div>
+        <div style="color:var(--text-secondary);">You have been invited by your institution administrator. Your account role has been pre-assigned.</div>
+      </div>
+
+      <!-- Role Selection (only Student & Parent for public registration) -->
+      <div class="form-group" id="roleGroup">
         <label class="form-label">I am a…</label>
-        <div class="role-grid" id="roleGrid">
+        <div class="role-grid" id="roleGrid" style="grid-template-columns:repeat(2,1fr);">
           <div class="role-card active" data-role="student" onclick="selectRole(this,'student')"><span class="role-card-icon">👨‍🎓</span>Student</div>
-          <div class="role-card" data-role="faculty" onclick="selectRole(this,'faculty')"><span class="role-card-icon">👨‍🏫</span>Faculty</div>
-          <div class="role-card" data-role="admin" onclick="selectRole(this,'admin')"><span class="role-card-icon">⚙️</span>Admin</div>
-          <div class="role-card" data-role="staff" onclick="selectRole(this,'staff')"><span class="role-card-icon">💼</span>Staff</div>
           <div class="role-card" data-role="parent" onclick="selectRole(this,'parent')"><span class="role-card-icon">👨‍👩‍👧</span>Parent</div>
-          <div class="role-card" data-role="librarian" onclick="selectRole(this,'librarian')"><span class="role-card-icon">📚</span>Librarian</div>
+        </div>
+        <div style="margin-top:0.625rem;font-size:0.8rem;color:var(--text-muted);padding:0.5rem 0.75rem;background:var(--bg-tertiary);border-radius:8px;">
+          ℹ️ Faculty, Admin, and Staff accounts are created exclusively by institution administrators.
         </div>
       </div>
 
@@ -150,12 +155,66 @@
   <script src="../../assets/js/firebase.js"></script>
   <script>
     let selectedRole = 'student';
+    let inviteData = null; // Set when a valid invite token is present
+
+    // ── Check for invite token ──────────────
+    async function checkInviteToken() {
+      const params = new URLSearchParams(window.location.search);
+      const token = params.get('invite');
+      if (!token) return;
+
+      try {
+        if (db) {
+          const snap = await db.collection('invitations').doc(token).get();
+          if (snap.exists) {
+            const data = snap.data();
+            // Check not expired
+            if (data.expiresAt && data.expiresAt.toDate() < new Date()) {
+              showAlert('This invitation link has expired. Please contact your administrator.');
+              return;
+            }
+            inviteData = { token, ...data };
+            // Pre-fill and lock fields
+            document.getElementById('regEmail').value = data.email || '';
+            document.getElementById('regEmail').readOnly = true;
+            if (data.department) document.getElementById('department').value = data.department;
+            // Show invite notice and set role
+            document.getElementById('inviteNotice').classList.remove('hidden');
+            document.getElementById('authTitle').textContent = `Join as ${capitalize(data.role)}`;
+            document.getElementById('authSub').innerHTML = 'Already have an account? <a href="login.html">Sign in →</a>';
+            // Replace role grid with locked role display
+            document.getElementById('roleGroup').innerHTML = `
+              <label class="form-label">Account Type</label>
+              <div style="display:flex;align-items:center;gap:0.75rem;padding:0.875rem;background:var(--bg-tertiary);border:2px solid var(--primary);border-radius:10px;">
+                <span style="font-size:1.5rem;">${roleIcon(data.role)}</span>
+                <div>
+                  <div style="font-weight:600;color:var(--primary-light);">${capitalize(data.role)}</div>
+                  <div style="font-size:0.75rem;color:var(--text-muted);">Assigned by administrator</div>
+                </div>
+              </div>
+            `;
+            selectedRole = data.role;
+          } else {
+            showAlert('Invalid invitation link. Please contact your administrator.');
+          }
+        }
+      } catch (e) {
+        console.warn('Invite check failed:', e);
+      }
+    }
+
+    function capitalize(s) { return s ? s.charAt(0).toUpperCase() + s.slice(1) : s; }
+    function roleIcon(role) {
+      const icons = { student: '👨‍🎓', faculty: '👨‍🏫', admin: '⚙️', staff: '💼', parent: '👨‍👩‍👧', librarian: '📚', accountant: '💰' };
+      return icons[role] || '👤';
+    }
 
     function selectRole(el, role) {
+      if (inviteData) return; // Cannot change role when using invite
       document.querySelectorAll('.role-card').forEach(c => c.classList.remove('active'));
       el.classList.add('active');
       selectedRole = role;
-      document.getElementById('rollNumberGroup').style.display = (role === 'student' || role === 'faculty' || role === 'staff') ? 'block' : 'none';
+      document.getElementById('rollNumberGroup').style.display = role === 'student' ? 'block' : 'none';
     }
 
     function checkStrength(val) {
@@ -178,6 +237,9 @@
       el.textContent = msg; el.classList.remove('hidden');
     }
 
+    // Allowed public roles (no invite needed)
+    const PUBLIC_ROLES = ['student', 'parent'];
+
     document.getElementById('registerForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const firstName = document.getElementById('firstName').value.trim();
@@ -194,6 +256,12 @@
       if (password.length < 8) { showAlert('Password must be at least 8 characters.'); return; }
       if (!terms) { showAlert('You must agree to the Terms of Service.'); return; }
 
+      // Security: block privileged roles without a valid invite
+      if (!PUBLIC_ROLES.includes(selectedRole) && !inviteData) {
+        showAlert('This account type requires an invitation from an administrator.');
+        return;
+      }
+
       const btn = document.getElementById('registerBtn');
       btn.disabled = true; btn.innerHTML = '⏳ Creating account…';
 
@@ -205,12 +273,17 @@
             name: `${firstName} ${lastName}`,
             email,
             role: selectedRole,
-            department: department || null,
+            department: department || (inviteData && inviteData.department) || null,
             rollNumber: rollNumber || null,
             permissions: [],
             status: 'active',
+            invitedBy: inviteData ? inviteData.createdBy : null,
             createdAt: firebase.firestore.FieldValue.serverTimestamp(),
           });
+          // Delete the invitation after use
+          if (inviteData && inviteData.token) {
+            await db.collection('invitations').doc(inviteData.token).delete().catch(() => {});
+          }
         }
         await result.user.sendEmailVerification();
         window.location.href = '../../dashboard.html';
@@ -227,6 +300,9 @@
     });
 
     if (auth) auth.onAuthStateChanged(u => { if (u) window.location.href = '../../dashboard.html'; });
+
+    // Check for invite on load
+    document.addEventListener('DOMContentLoaded', checkInviteToken);
   </script>
 </body>
 </html>
